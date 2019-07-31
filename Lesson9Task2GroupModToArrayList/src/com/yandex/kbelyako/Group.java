@@ -15,8 +15,6 @@ import java.util.Scanner;
 
 public class Group implements Comparator<Human>, Military, Serializable {
 
-	// private Student[] group1 = new Student[10];
-
 	private ArrayList<Student> group1 = new ArrayList<Student>();
 
 	public Group() {
@@ -52,7 +50,6 @@ public class Group implements Comparator<Human>, Military, Serializable {
 		this.name = name;
 	}
 
-
 	@Override
 	public String toString() {
 		return "Group [group1=" + group1 + ", name=" + name + "]";
@@ -68,15 +65,50 @@ public class Group implements Comparator<Human>, Military, Serializable {
 	}
 
 	public void addstudent(Student student) {
+		if (group1.size() < 10) {
+			group1.add(student);
+		}
 
-		group1.add(student);
+	}
+
+	public void addstudentInteractive(int i) {
+
+		if (group1.size() < 10) {
+			Student newStudent = new Student();
+			Scanner in = new Scanner(System.in);
+			System.out.print("Enter student first name: ");
+			try {
+				newStudent.setfName(in.next());
+			} catch (Exception e1) {
+
+				e1.printStackTrace();
+			}
+			System.out.print("Enter student last name: ");
+			newStudent.setlNname(in.next());
+			System.out.print("Enter student patronymic: ");
+			newStudent.setPatronymic(in.next());
+			System.out.print("Enter student sex: ");
+			newStudent.setSex(in.next());
+			System.out.print("Enter student age: ");
+			newStudent.setAge(in.nextInt());
+			group1.add(newStudent);
+		}
+
+		else {
+			try {
+				throw new MyException();
+			} catch (MyException e) {
+
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 	public void rmvStudent(Student sudent) {
 		group1.remove(sudent);
 	}
 
-	
 	public ArrayList<Student> sort() {
 
 		ArrayList<Student> groupNew = group1;
@@ -132,14 +164,14 @@ public class Group implements Comparator<Human>, Military, Serializable {
 		int counter = 0;
 
 		String strResult = "Search result for last name " + lName + ":";
-		for (int i = 0; i <group1.size(); i++) {
-			
-				if (group1.get(i).getlName() == lName) {
-					result = group1.get(i);
-					counter = counter + 1;
-					strResult = strResult + (char) 0x0D + result.toString();
+		for (int i = 0; i < group1.size(); i++) {
 
-				}			
+			if (group1.get(i).getlName() == lName) {
+				result = group1.get(i);
+				counter = counter + 1;
+				strResult = strResult + (char) 0x0D + result.toString();
+
+			}
 
 		}
 		if (result == null) {
@@ -190,9 +222,9 @@ public class Group implements Comparator<Human>, Military, Serializable {
 
 		try (PrintWriter a = new PrintWriter(fileName + ".txt")) {
 			for (int i = 0; i < group1.size(); i++) {
-			
-					a.println(group1.get(i).toStringToFile());
-				// a.println("Green Lamp");
+
+				a.println(group1.get(i).toStringToFile());
+
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println("ERROR FILE WRITE");
@@ -201,7 +233,7 @@ public class Group implements Comparator<Human>, Military, Serializable {
 	}
 
 	public static String FiletoString(File f) {
-		String[] strinArray = new String[10];
+		String[] stringArray = new String[10];
 		String str2 = "";
 		try (BufferedReader br = new BufferedReader(new FileReader(f))) {
 			String str1 = "";
@@ -240,23 +272,18 @@ public class Group implements Comparator<Human>, Military, Serializable {
 	public static Group groupFromString(String inputString) {
 		Group resGroup = new Group();
 		String[] array = inputString.split(";");
-		// System.out.println("Array: "+Arrays.toString(array));
 		for (int i = 0; i < array.length; i++) {
 			if (array[i].equals(""))
 				continue;
 			else {
-				// System.out.println("������� �������
-				// �������:"+" "+i+" "+array[i]);
 				resGroup.addstudent(Group.studentFromString(array[i]));
 			}
-			//
 		}
 		return resGroup;
 	}
 
 	public static Group loadGroup(File inputFile) {
 		Group resGroup = new Group();
-		// resGroup.setName(name);
 		resGroup = Group.groupFromString(Group.FiletoString(inputFile));
 		resGroup.setName(stripExtension(inputFile.getName()));
 		return resGroup;

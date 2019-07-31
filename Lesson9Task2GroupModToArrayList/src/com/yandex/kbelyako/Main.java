@@ -60,6 +60,9 @@ public class Main {
 			testGroup.addstudent(student3);
 			testGroup.addstudent(student5);
 			testGroup.addstudent(student9);
+			testGroup.addstudent(student1
+					);
+			testGroup.addstudent(student9);
 	
 		//System.out.println(testGroup);
 
